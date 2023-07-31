@@ -1,0 +1,91 @@
+version: "3"
+
+networks:
+  t2_proxy:
+    external: true
+
+
+services:
+
+#### this is where the monitoring station frontend will go
+##  monitoring-station-frontend:
+##    image: connorcorso/monitoring_station_frontend
+##  container_name: monitoring-station-frontend
+##
+##    volumes: 
+##      - ./cache:/cache
+##
+##    restart: unless-stopped
+##    networks: 
+##      t2_proxy:
+##
+##
+##    labels:
+##      - traefik.enable=true
+##
+##      - traefik.http.services.monitoring-station-frontend_svc.loadbalancer.server.port=8000
+##      
+##      - traefik.http.routers.monitoring-station-frontend.tls=true
+##      - traefik.http.routers.monitoring-station-frontend.rule=Host(`monitoring.ccorso.ca`)
+##      - traefik.http.routers.monitoring-station-frontend.entrypoints=websecure
+##      
+##      - traefik.http.routers.monitoring-station-frontend.service=monitoring-station-frontend_svc
+
+#### this is the monitoring station backend that I have built.
+  monitoring-station-backend: 
+    image: connorcorso/monitoring-station-backend
+    container_name: monitoring-station-backend
+
+    volumes: 
+      - ./cache:/cache
+
+    restart: unless-stopped
+    networks: 
+      t2_proxy:
+
+
+    labels:
+      - traefik.enable=true
+
+      - traefik.http.services.monitoring-station-backend_svc.loadbalancer.server.port=8001
+      
+      - traefik.http.routers.monitoring-station-backend.tls=true
+      - traefik.http.routers.monitoring-station-backend.rule=Host(`monitoring-station-backend.ccorso.ca`)
+      - traefik.http.routers.monitoring-station-backend.entrypoints=websecure
+      
+      - traefik.http.routers.monitoring-station-backend.service=monitoring-station-backend_svc
+      
+## this is the postgres database container that we will dump all of the data into
+  monitoring_station_db:
+    image: postgresql:latest
+    container_name: monitoring_station_db
+    hostname: monitoring-station-db
+    #restart: unless-stopped
+    environment:
+      - "POSTGRES_PASSWORD=verySecure"
+      - "POSTGRES_USER=monitoring-station-backend"
+      - "PGDATA=/var/lib/postgresql/data/pgdata"
+      
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    networks:
+      t2_proxy:
+        ipv4_address: 192.168.90.22
+
+
+#### this is for testing only and doesn't really need to be used
+##  adminer:
+##    image: adminer
+##    restart: always
+##    ports: 
+##      - 8080:8080
+##    labels:
+##      - traefik.enable=true
+##
+##      - traefik.http.services.monitoring-station-adminer_svc.loadbalancer.server.port=8080
+##      
+##      - traefik.http.routers.monitoring-station-adminer.tls=true
+##      - traefik.http.routers.monitoring-station-adminer.rule=Host(`ms-adminer.ccorso.ca`)
+##      - traefik.http.routers.monitoring-station-adminer.entrypoints=websecure
+##      
+##      - traefik.http.routers.monitoring-station-adminer.service=monitoring-station-adminer_svc

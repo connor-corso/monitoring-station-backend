@@ -23,8 +23,8 @@ def get_StationDatas(db: Session):
     return db.query(models.StationData).all()
 
 
-def get_StationData(db: Session):
-    return db.query(models.StationData).first()
+def get_StationDataByID(db: Session, station_id : int):
+    return db.query(models.StationData).filter(models.StationData.station_id == station_id).first()
 
 
 def create_StationData(db: Session, stationdata: schemas.StationDataCreate):

@@ -25,7 +25,7 @@ class StationDataBase(BaseModel):
     description: str | None = None
     units: str | None = None
     data: list[DataEntry] = []
-    station_id: int
+    station_id: int = 0 # this is an autoincrementing field, set to 0 to allow it to pick
 
 
 class StationDataCreate(StationDataBase):

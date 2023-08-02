@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 
 def get_DataEntries_by_station_id(db: Session, station_id: int):
-    return db.query(models.DataEntry).filter(models.DataEntry.owner == station_id).all()
+    return db.query(models.DataEntry).filter(models.DataEntry.owner.has(station_id=station_id)).all()
 
 
 def get_DataEntry_by_station_id(db: Session, station_id: int):

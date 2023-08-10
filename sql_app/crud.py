@@ -14,7 +14,7 @@ def get_DataEntries_by_station_id(db: Session, station_id: int):
 
     for index,dataEntry in enumerate(data):
         try:
-            dt = (1/compressionFactor) * int(dataEntry.datetime)
+            dt = int((1/compressionFactor) * int(dataEntry.datetime))
             da = (1/compressionFactor) * dataEntry.data
             if math.floor(index / compressionFactor) == index / compressionFactor:
                 averageData.append(schemas.DataEntryLightweightCreate(datetime=dt, data=da))

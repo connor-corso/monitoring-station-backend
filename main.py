@@ -56,6 +56,20 @@ def read_dataEntries(station_id: int, db: Session = Depends(get_db)):
     data_entries = crud.get_DataEntries_by_station_id(db, station_id=station_id)
     return data_entries
 
+@app.get("/list-latest-record/{station_id}/", response_model=schemas.DataEntry)
+def get_latest_record(station_id: int, db: Session = Depends(get_db)):
+    latest_record = crud.get_DataEntry_by_station_id(db, station_id)
+    return latest_record
+
+@app.get("/list-stations/", response_model=list[schemas.StationData])
+def read_station_datas(db: Session = Depends(get_db)):
+    station_datas = crud.get_StationDatas(db)
+    return station_datas
+
+@app.get("/get-station-info/{station_id}/", response_model=schemas.StationData)
+def get_station_info(station_id: int, db: Session = Depends(get_db)):
+    station_information = crud.get_StationDataByID(db, station_id)
+    return station_information
 
 if __name__ == "__main__":
     uvicorn.run("MPextract:app", port=8000, log_level="debug")

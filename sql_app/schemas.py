@@ -19,7 +19,7 @@ class DataEntry(DataEntryBase):
 
 ###########
 class DataEntryLightweight(BaseModel):
-    ditetime: int
+    datetime: int
     data: float
 
 class DataEntryLightweightCreate(DataEntryLightweight):

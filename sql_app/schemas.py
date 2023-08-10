@@ -17,6 +17,14 @@ class DataEntry(DataEntryBase):
     class Config:
         from_attributes = True
 
+###########
+class DataEntryLightweight(BaseModel):
+    ditetime: int
+    data: float
+
+class DataEntryLightweightCreate(DataEntryLightweight):
+    pass
+
 
 ####################
 

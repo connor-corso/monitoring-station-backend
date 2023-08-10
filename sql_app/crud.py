@@ -9,7 +9,7 @@ def get_DataEntries_by_station_id(db: Session, station_id: int):
 
     compressionFactor = 10
     data = db.query(models.DataEntry).filter(models.DataEntry.owner.has(station_id=station_id)).all()
-    averageData = [schemas.DataEntryLightweightCreate] *  ( len(data) / compressionFactor) # take however many data entries there are, and divide by the compression factor (probably 10)
+    averageData = [schemas.DataEntryLightweightCreate] *  int( len(data) / compressionFactor) # take however many data entries there are, and divide by the compression factor (probably 10)
     for index,dataEntry in enumerate(data):
         averageData[math.floor(index / compressionFactor)].datetime += (1/compressionFactor) * dataEntry.datetime
         averageData[math.floor(index / compressionFactor)].data += (1/compressionFactor) * dataEntry.data

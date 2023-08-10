@@ -11,6 +11,15 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v3
+      # Restore cached Docker image layers
+      - 
+        name: Restore Docker Cache
+        uses: actions/cache@v2
+        with:
+          path: /var/lib/docker
+          key: docker-cache-{{ runner.os }}-${{ hashFiles('**/Dockerfile*') }}
+          restore-keys: |
+            docker-cache-{{ runner.os }}-
       -
         name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -28,3 +37,9 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/monitoring-station-backend:latest
+      -
+        name: Save Docker Cache
+        uses: actions/cache@v2
+        with: 
+          path: /var/lib/docker
+          key: docker-cache-{{ runner.os }}-${{ hashFiles('**/Dockerfile*') }}

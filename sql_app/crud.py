@@ -17,8 +17,15 @@ def get_DataEntries_by_station_id(db: Session, station_id: int):
 
     averageData = [schemas.DataEntryLightweightCreate] *  int( len(data) / compressionFactor) # take however many data entries there are, and divide by the compression factor (probably 10)
     for index,dataEntry in enumerate(data):
-        averageData[math.floor(index / compressionFactor)].datetime += (1/compressionFactor) * int(dataEntry.datetime)
-        averageData[math.floor(index / compressionFactor)].data += (1/compressionFactor) * dataEntry.data
+        try:
+            averageData[math.floor(index / compressionFactor)].datetime += (1/compressionFactor) * int(dataEntry.datetime)
+            averageData[math.floor(index / compressionFactor)].data += (1/compressionFactor) * dataEntry.data
+        except:
+
+            print(dir(dataEntry))
+            #print(int(dataEntry.datetime))
+            pass
+
 
     # the last entry may not have had the full compressionFactor number of data entries in it so we should scrap it
     averageData[math.floor(len(data)/10)] = None

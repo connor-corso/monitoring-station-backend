@@ -44,9 +44,9 @@ async def get_file_data(inputfile):
     pass
 
 # this has no checking to see if the data already exists but I feel like that is okay
-@app.post("/create-record/{station_id}/", response_model=schemas.DataEntry)
-def create_record(station_id: int, record: schemas.DataEntryCreate, db: Session = Depends(get_db)):
-    station = crud.get_StationDataByID(db, station_id=station_id)
+@app.post("/create-record/{station_id}/{compression_factor}", response_model=schemas.DataEntry)
+def create_record(station_id: int, record: schemas.DataEntryCreate, db: Session = Depends(get_db), compression_factor: int = 10):
+    station = crud.get_StationDataByID(db, station_id=station_id, compression_factor = compression_factor)
     if not station:
         crud.create_StationData(db, schemas.StationDataCreate(station_id=station_id))
     return crud.create_DataEntry(db, dataentry=record, station_id=station_id)
@@ -54,6 +54,11 @@ def create_record(station_id: int, record: schemas.DataEntryCreate, db: Session 
 @app.get("/list-records/{station_id}/", response_model=list[schemas.DataEntryLightweight])
 def read_dataEntries(station_id: int, db: Session = Depends(get_db)):
     data_entries = crud.get_DataEntries_by_station_id(db, station_id=station_id)
+    return data_entries
+
+@app.get("/list-records/{station_id}/{start_time}/{end_time}/{compression_factor}")
+def read_dataEntries(station_id: int, start_time: int, end_time: int, db: Session = Depends(get_db), compression_factor: int = 10):
+    data_entries = crud.get_DataEntries_by_station_id_and_time(db, station_id=station_id, start_time = start_time, end_time = end_time, compression_factor = compression_factor)
     return data_entries
 
 @app.get("/list-latest-record/{station_id}/", response_model=schemas.DataEntry)

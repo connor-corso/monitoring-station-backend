@@ -5,7 +5,7 @@ from . import models, schemas
 
 
 
-def get_DataEntries_by_station_id(db: Session, station_id: int, compression_factor: int):
+def get_DataEntries_by_station_id(db: Session, station_id: int, compression_factor = 10):
     data = db.query(models.DataEntry).filter(models.DataEntry.owner.has(station_id=station_id)).all()
     
     averageData = []
@@ -31,7 +31,7 @@ def get_DataEntries_by_station_id(db: Session, station_id: int, compression_fact
     return averageData
     
 
-def get_DataEntries_by_station_id_and_time(db: Session, station_id: int, start_time: int, end_time: int, compression_factor: int):
+def get_DataEntries_by_station_id_and_time(db: Session, station_id: int, start_time: int, end_time: int, compression_factor = 10):
     data = db.query(models.DataEntry).filter(models.DataEntry.owner.has(station_id=station_id)).all()
     
     averageData = []

@@ -14,7 +14,7 @@ jobs:
       # Restore cached Docker image layers
       - 
         name: Restore Docker Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /var/lib/docker
           key: docker-cache-{{ runner.os }}-${{ hashFiles('**/Dockerfile*') }}
@@ -39,7 +39,7 @@ jobs:
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/monitoring-station-backend:latest
       -
         name: Save Docker Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with: 
           path: /var/lib/docker
           key: docker-cache-{{ runner.os }}-${{ hashFiles('**/Dockerfile*') }}

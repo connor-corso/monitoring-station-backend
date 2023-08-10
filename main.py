@@ -70,6 +70,3 @@ def read_station_datas(db: Session = Depends(get_db)):
 def get_station_info(station_id: int, db: Session = Depends(get_db)):
     station_information = crud.get_StationDataByID(db, station_id)
     return station_information
-
-if __name__ == "__main__":
-    uvicorn.run("MPextract:app", port=8000, log_level="debug")

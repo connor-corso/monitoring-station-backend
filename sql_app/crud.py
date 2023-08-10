@@ -9,29 +9,20 @@ def get_DataEntries_by_station_id(db: Session, station_id: int):
     compressionFactor = 10
     data = db.query(models.DataEntry).filter(models.DataEntry.owner.has(station_id=station_id)).all()
     
-    try:
-        print(dir(data[1].datetime))
-        print(int(data[1].datetime))
-    except:
-        pass
 
-    averageData = [schemas.DataEntryLightweightCreate(datetime=0, data=0)] *  (1 + int( len(data) / compressionFactor)) # take however many data entries there are, and divide by the compression factor (probably 10)
-    try: 
-        print(dir(averageData[1]))
-    except Exception as e:
-        print(e)
+    averageData = []
 
     for index,dataEntry in enumerate(data):
         try:
             dt = (1/compressionFactor) * int(dataEntry.datetime)
             da = (1/compressionFactor) * dataEntry.data
-            averageData[math.floor(index / compressionFactor)].datetime += dt
-            averageData[math.floor(index / compressionFactor)].data += da
-        except:
-
-            print(dir(dataEntry.datetime))
-            print(int(dataEntry.datetime))
-            pass
+            if math.floor(index / compressionFactor) == index / compressionFactor:
+                averageData.append(schemas.DataEntryLightweightCreate(datetime=dt, data=da))
+            else:
+                averageData[math.floor(index / compressionFactor)].datetime += dt
+                averageData[math.floor(index / compressionFactor)].data += da
+        except Exception as e:
+            print(e)
 
 
     # the last entry may not have had the full compressionFactor number of data entries in it so we should scrap it

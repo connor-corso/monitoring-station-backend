@@ -51,7 +51,7 @@ def create_record(station_id: int, record: schemas.DataEntryCreate, db: Session 
         crud.create_StationData(db, schemas.StationDataCreate(station_id=station_id))
     return crud.create_DataEntry(db, dataentry=record, station_id=station_id)
 
-@app.get("/list-records/{station_id}/", response_model=list[schemas.DataEntry])
+@app.get("/list-records/{station_id}/", response_model=list[schemas.DataEntryLightweight])
 def read_dataEntries(station_id: int, db: Session = Depends(get_db)):
     data_entries = crud.get_DataEntries_by_station_id(db, station_id=station_id)
     return data_entries

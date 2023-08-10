@@ -15,15 +15,15 @@ def get_DataEntries_by_station_id(db: Session, station_id: int):
     except:
         pass
 
-    averageData = [schemas.DataEntryLightweightCreate] *  int( len(data) / compressionFactor) # take however many data entries there are, and divide by the compression factor (probably 10)
+    averageData = [schemas.DataEntryLightweightCreate] *  (1 + int( len(data) / compressionFactor)) # take however many data entries there are, and divide by the compression factor (probably 10)
     for index,dataEntry in enumerate(data):
         try:
             averageData[math.floor(index / compressionFactor)].datetime += (1/compressionFactor) * int(dataEntry.datetime)
             averageData[math.floor(index / compressionFactor)].data += (1/compressionFactor) * dataEntry.data
         except:
 
-            print(dir(dataEntry))
-            #print(int(dataEntry.datetime))
+            print(dir(dataEntry.datetime))
+            print(int(dataEntry.datetime))
             pass
 
 

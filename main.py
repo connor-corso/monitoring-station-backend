@@ -18,10 +18,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from sql_app import crud, models, schemas
 from sql_app.database import SessionLocal, engine
 
-fakedatabase = {
-    1: models.StationData(title="Temp", description="temperature you dumb", units="deg C" ),
-    2: models.StationData(title="Pressure", description="air pressure you dumb", units="kpa" )
-}
 
 # fast api stuff
 models.Base.metadata.create_all(bind=engine)

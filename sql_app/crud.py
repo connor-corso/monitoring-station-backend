@@ -10,6 +10,7 @@ def get_DataEntries_by_station_id(db: Session, station_id: int):
 
 
 def get_DataEntry_by_station_id(db: Session, station_id: int):
+
     compressionFactor = 10
     data = db.query(models.DataEntry).filter(models.DataEntry.owner == station_id).first()
     averageData = [schemas.DataEntryLightweightCreate] *  ( len(data) / compressionFactor) # take however many data entries there are, and divide by the compression factor (probably 10)
@@ -19,7 +20,7 @@ def get_DataEntry_by_station_id(db: Session, station_id: int):
 
     # the last entry may not have had the full compressionFactor number of data entries in it so we should scrap it
     averageData[math.floor(len(data)/10)] = None
-    
+    print(averageData)
     return averageData
 
 

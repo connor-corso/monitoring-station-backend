@@ -13,10 +13,13 @@ def get_DataEntries_by_station_id(db: Session, station_id: int, compression_fact
     for index,dataEntry in enumerate(data):
         try:
             dt = int((1/compression_factor) * int(dataEntry.datetime))
-            da = (1/compression_factor) * dataEntry.data,2
+            da = (1/compression_factor) * dataEntry.data
             if math.floor(index / compression_factor) == index / compression_factor:
-                averageData[averageData.count -1].data = round(averageData[averageData.count -1].data,2)
-                averageData.append(schemas.DataEntryLightweightCreate(datetime=dt, data=da))
+                #averageData[averageData.count -1].data = round(averageData[averageData.count -1].data,2)
+                elem = schemas.DataEntryLightweightCreate(datetime=dt,data=da)
+                #elem.datetime=dt
+                #elem.data=da
+                averageData.append(elem)
             else:
                 averageData[math.floor(index / compression_factor)].datetime += dt
                 averageData[math.floor(index / compression_factor)].data += da
@@ -26,8 +29,8 @@ def get_DataEntries_by_station_id(db: Session, station_id: int, compression_fact
 
     # the last entry may not have had the full compression_factor number of data entries in it so we should scrap it so that we don't have some entry that is at 1/compression_factor * actual time, resulting in it being way earlier
     averageData.pop()
-    print(data)
-    print(averageData)
+    #print(data)
+    #print(averageData)
     return averageData
     
 

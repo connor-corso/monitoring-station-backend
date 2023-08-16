@@ -6,7 +6,7 @@ from . import models, schemas
 
 
 def get_DataEntries_by_station_id(db: Session, station_id: int, compression_factor = 10):
-    data = db.query(models.DataEntry).filter(models.DataEntry.owner.has(station_id=station_id)).all()
+    data = db.query(models.DataEntry).filter(models.DataEntry.owner.has(station_id=station_id)).order_by(models.DataEntry.datetime.asc()).all()
     
     averageData = []
 
@@ -29,8 +29,6 @@ def get_DataEntries_by_station_id(db: Session, station_id: int, compression_fact
 
     # the last entry may not have had the full compression_factor number of data entries in it so we should scrap it so that we don't have some entry that is at 1/compression_factor * actual time, resulting in it being way earlier
     averageData.pop()
-    #print(data)
-    #print(averageData)
     return averageData
     
 

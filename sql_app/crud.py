@@ -61,7 +61,7 @@ def get_DataEntries_by_station_id_and_time(db: Session, station_id: int, start_t
     
 
 def get_DataEntry_by_station_id(db: Session, station_id: int):
-    return db.query(models.DataEntry).filter(models.DataEntry.owner.has(station_id=station_id)).first()
+    return db.query(models.DataEntry).filter(models.DataEntry.owner.has(station_id=station_id)).order_by(models.DataEntry.datetime.desc()).first()
 
 
 

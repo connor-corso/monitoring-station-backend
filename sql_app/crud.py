@@ -66,11 +66,15 @@ def get_DataEntry_by_station_id(db: Session, station_id: int):
 
 
 def create_DataEntry(db: Session, dataentry: schemas.DataEntryCreate, station_id: int):
-    db_dataentry = models.DataEntry(datetime = dataentry.datetime, data = dataentry.data, owner_id = station_id)
-    db.add(db_dataentry)
-    db.commit()
-    db.refresh(db_dataentry)
-    return db_dataentry
+    station_info = db.query(models.StationData).filter(models.StationData.station_id==station_id).first()
+    if dataentry.data > station_info.min_value and dataentry.data < station_info.max_value:
+        db_dataentry = models.DataEntry(datetime = dataentry.datetime, data = dataentry.data, owner_id = station_id)
+        db.add(db_dataentry)
+        db.commit()
+        db.refresh(db_dataentry)
+        return db_dataentry
+    else:
+        return False
 
 
 def get_StationDatas(db: Session):

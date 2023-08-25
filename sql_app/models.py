@@ -11,6 +11,8 @@ class StationData(Base):
     title = Column(String, index=True)
     description = Column(String, index=True)
     units = Column(String)
+    max_value = Column(Float)
+    min_value = Column(Float)
     
     data_entries = relationship("DataEntry", back_populates="owner")
 

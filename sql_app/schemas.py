@@ -33,6 +33,8 @@ class StationDataBase(BaseModel):
     description: str | None = None
     units: str | None = None
     data: list[DataEntry] = []
+    max_value: float | None = 0
+    min_value: float | None = 0
     station_id: int = 0 # this is an autoincrementing field, set to 0 to allow it to pick
 
 
